@@ -111,8 +111,8 @@ class RoutineMockDataProvider: RoutineDataProvidable {
                             history: [load])
         
         let workout_1 = Workout(id: UUID().uuidString, name: "Peito", type: .calisthenics, exercises: [ex_1])
-        let workout_2 = Workout(id: UUID().uuidString, name: "Triceps", type: .calisthenics, exercises: [ex_1, ex_2])
-        let workout_3 = Workout(id: UUID().uuidString, name: "Biceps", type: .calisthenics, exercises: [ex_1, ex_3])
+        let workout_2 = Workout(id: UUID().uuidString, name: "Triceps", type: .gym, exercises: [ex_1, ex_2])
+        let workout_3 = Workout(id: UUID().uuidString, name: "Biceps", type: .cardio, exercises: [ex_1, ex_3])
         
         return [
             Routine(id: UUID().uuidString, date: .now, workout: workout_1),

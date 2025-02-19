@@ -8,5 +8,9 @@
 import Foundation
 
 protocol ExerciseViewProtocol {
+    
     var exercise: Exercise { get set }
+    var load: Load { get set }
+    var edit: Bool { get set }
+    func updateLoad()
 }

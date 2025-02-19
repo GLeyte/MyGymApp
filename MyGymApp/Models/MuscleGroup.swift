@@ -7,11 +7,11 @@
 
 
 enum MuscleGroup: String, Codable, CaseIterable, Equatable {
-    case chest
-    case legs
-    case back
-    case shoulders
-    case core
-    case biceps
-    case triceps
+    case chest = "Peito"
+    case legs = "Pernas"
+    case back = "Costas"
+    case shoulders = "Ombros"
+    case core = "Abdominais"
+    case biceps = "Bíceps"
+    case triceps = "Tríceps"
 }

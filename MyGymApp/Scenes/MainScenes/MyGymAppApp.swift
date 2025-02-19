@@ -14,7 +14,8 @@ struct MyGymAppApp: App {
     @MainActor
     let sharedModelContainer: ModelContainer = {
         let schema = Schema(versionedSchema: SchemaLatest.self)
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        //TODO: Change `isStoredInMemoryOnly` to `false`
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {

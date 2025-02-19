@@ -19,16 +19,21 @@ struct TabBarView: View {
             
             NavigationStack(path: $stackPathWorkout.path) {
                 InitialWorkoutView(workoutDataManager: WorkoutDataProvider(context: modelContext))
-                    .navigationTitle(String(localized:"Treinos"))
+                    .navigationTitle("Treinos")
             }
             .environment(stackPathWorkout)
             .tabItem {
-                Label(String(localized:"Treinos"), systemImage: "figure.strengthtraining.traditional")
+                Label("Treinos", systemImage: "figure.strengthtraining.traditional")
+            }
+            
+            NavigationStack(path: $stackPathWorkout.path) {
+                CalendarView(routineDataManager: RoutineDataProvider(context: modelContext))
+                    .navigationTitle("Exercícios")
+            }
+            .environment(stackPathWorkout)
+            .tabItem {
+                Label("Exercícios", systemImage: "figure.strengthtraining.traditional")
             }
         }
     }
-}
-
-#Preview {
-    TabBarView()
 }
