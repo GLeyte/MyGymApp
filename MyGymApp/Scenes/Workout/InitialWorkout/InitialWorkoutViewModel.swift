@@ -11,18 +11,19 @@ import SwiftUI
 @Observable
 final class InitialWorkoutViewModel {
     
-    private var workoutDataManager: WorkoutDataProvidable
+    private var routineDataManager: RoutineDataProvidable
     
-    var workouts: [Workout] = []
+    var routines: [Routine] = []
     
-    init(workoutDataManager: WorkoutDataProvidable) {
-        self.workoutDataManager = workoutDataManager
+    init(routineDataManager: RoutineDataProvidable) {
+        self.routineDataManager = routineDataManager
         fetchWorkouts()
     }
     
     private func fetchWorkouts() {
         do {
-            try workouts = workoutDataManager.getItems()
+            let sortedRoutines = try routineDataManager.getItems().sorted { $0.date < $1.date }
+            routines = Array(sortedRoutines.prefix(upTo: min(10, sortedRoutines.count)))
         } catch {
             print(error)
         }

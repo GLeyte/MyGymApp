@@ -25,4 +25,17 @@ enum ExerciseType: String, Codable, CaseIterable, Equatable {
             return .red
         }
     }
+    
+    func getSymbol() -> String {
+        switch self {
+        case .cardio:
+            return "figure.run"
+        case .gym:
+            return "dumbbell.fill"
+        case .calisthenics:
+            return "figure.play"
+        case .warmup:
+            return "flame.fill"
+        }
+    }
 }

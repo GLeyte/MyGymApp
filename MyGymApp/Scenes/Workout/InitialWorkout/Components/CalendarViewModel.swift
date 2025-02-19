@@ -8,9 +8,6 @@
 import Foundation
 import SwiftUI
 
-import Foundation
-import SwiftUI
-
 @Observable
 class CalendarViewModel {
     
@@ -21,16 +18,18 @@ class CalendarViewModel {
     var endOfMonthAdjustment: Date
     var date: Date
     
-    let daysOfWeek: [String] = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"]
+    let daysOfWeek: [String] = Date.capitalizedFirstLettersOfWeekdays
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
     
     var colors: [Int: Color] = [:]
+    var days: [Date] = []
     
-    init(routineDataManager: RoutineDataProvidable) {
+    init(date:Date, routineDataManager: RoutineDataProvidable) {
+        self.days = date.calendarDisplayDays
         self.routineDataManager = routineDataManager
-        self.date = .now
-        self.startOfMonth = .now.startOfMonth
-        self.endOfMonthAdjustment = Calendar.current.date(byAdding: .day, value: 1, to: .now.endOfMonth)!
+        self.date = date
+        self.startOfMonth = date.startOfMonth
+        self.endOfMonthAdjustment = Calendar.current.date(byAdding: .day, value: 1, to: date.endOfMonth)!
         fetchData()
         setupColor()
     }
@@ -46,6 +45,7 @@ class CalendarViewModel {
     }
     
     private func updateDates() {
+        days = date.calendarDisplayDays
         startOfMonth = date.startOfMonth
         endOfMonthAdjustment = Calendar.current.date(byAdding: .day, value: 1, to: date.endOfMonth)!
     }

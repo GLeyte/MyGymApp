@@ -12,7 +12,7 @@ extension Date {
     static var firstDayOfWeek = Calendar.current.firstWeekday
     static var capitalizedFirstLettersOfWeekdays: [String] {
         let calendar = Calendar.current
-
+        
         // Adjusted for the different weekday starts
         var weekdays = calendar.shortWeekdaySymbols
         if firstDayOfWeek > 1 {
@@ -53,6 +53,13 @@ extension Date {
     
     var numberOfDaysInMonth: Int {
         Calendar.current.component(.day, from: endOfMonth)
+    }
+    
+    var numberOfDaysInYear: Int {
+        let calendar = Calendar.current
+        let date = Date()
+        let range = calendar.range(of: .day, in: .year, for: date)
+        return range?.count ?? 0
     }
     
     // Fix: negative days causing issue for first row
@@ -98,6 +105,7 @@ extension Date {
     var startOfDay: Date {
         Calendar.current.startOfDay(for: self)
     }
+    
     
     // Used to generate the mock data for previews
     // Computed property courtesy of ChatGPT

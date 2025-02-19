@@ -9,18 +9,17 @@ import SwiftUI
 
 struct CalendarView: View {
     
-    @State private var days: [Date] = []
+    @Binding private var date: Date
     @State private var viewModel: CalendarViewModel
     
-    init(routineDataManager: RoutineDataProvidable) {
+    init(date: Binding<Date>, routineDataManager: RoutineDataProvidable) {
         
-        viewModel = CalendarViewModel(routineDataManager: routineDataManager)
+        self._date = date
+        viewModel = CalendarViewModel(date: date.wrappedValue, routineDataManager: routineDataManager)
     }
     
     var body: some View {
         VStack(spacing: 24) {
-            
-            
             
             HStack(spacing: 32) {
                 
@@ -51,11 +50,10 @@ struct CalendarView: View {
                             .frame(maxWidth: .infinity)
                     }
                 }
-                .padding(.horizontal)
                 
                 
                 LazyVGrid(columns: viewModel.columns) {
-                    ForEach(days, id: \.self) { day in
+                    ForEach(viewModel.days, id: \.self) { day in
                         // This `if` remove dates from days of other months
                         if day.monthInt != viewModel.date.monthInt {
                             Text("")
@@ -63,7 +61,7 @@ struct CalendarView: View {
                             Text(day.formatted(.dateTime.day()))
                                 .fontWeight(.bold)
                                 .foregroundStyle(.secondary)
-                                .frame(maxWidth: .infinity, minHeight: 40)
+                                .frame(maxWidth: .infinity, minHeight: 30)
                                 .background(
                                     Circle()
                                         .foregroundStyle(
@@ -75,20 +73,16 @@ struct CalendarView: View {
                         }
                     }
                 }
-                .padding()
+                .padding(.vertical)
+                .frame(height: 250)
                 .background{
                     RoundedRectangle(cornerRadius: 16)
                         .foregroundStyle(Color(UIColor.secondarySystemBackground))
                 }
             }
         }
-        .onAppear {
-            days = viewModel.date.calendarDisplayDays
-            viewModel.setupColor()
-        }
         .onChange(of: viewModel.date) {
-            days = viewModel.date.calendarDisplayDays
-            viewModel.setupColor()
+            self.date = viewModel.date
         }
     }
     
@@ -97,6 +91,6 @@ struct CalendarView: View {
 #Preview {
     let preview = Preview()
     preview.addRoutineSamples()
-    return CalendarView(routineDataManager: RoutineMockDataProvider())
+    return CalendarView(date: .constant(.now), routineDataManager: RoutineMockDataProvider())
         .modelContainer(preview.modelContainer)
 }

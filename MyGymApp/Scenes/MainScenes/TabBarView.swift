@@ -18,7 +18,7 @@ struct TabBarView: View {
         TabView {
             
             NavigationStack(path: $stackPathWorkout.path) {
-                InitialWorkoutView(workoutDataManager: WorkoutDataProvider(context: modelContext))
+                InitialWorkoutView(routineDataManager: RoutineDataProvider(context: modelContext))
                     .navigationTitle("Treinos")
             }
             .environment(stackPathWorkout)
@@ -27,7 +27,7 @@ struct TabBarView: View {
             }
             
             NavigationStack(path: $stackPathWorkout.path) {
-                CalendarView(routineDataManager: RoutineDataProvider(context: modelContext))
+                Text("")
                     .navigationTitle("Exercícios")
             }
             .environment(stackPathWorkout)

@@ -31,7 +31,7 @@ class Router {
 }
 
 enum Screen: Hashable {
-    case Add
+    case Workouts
 }
 
 struct RouterValue: Hashable {

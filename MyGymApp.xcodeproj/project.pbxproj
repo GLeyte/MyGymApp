@@ -169,11 +169,12 @@
 				};
 			};
 			buildConfigurationList = D3F5D3102D15EF1900CE3BB2 /* Build configuration list for PBXProject "MyGymApp" */;
-			developmentRegion = en;
+			developmentRegion = "pt-BR";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				"pt-BR",
 			);
 			mainGroup = D3F5D30C2D15EF1900CE3BB2;
 			minimizedProjectReferenceProxies = 1;

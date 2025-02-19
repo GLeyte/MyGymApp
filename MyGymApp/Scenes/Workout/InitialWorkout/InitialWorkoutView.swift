@@ -12,41 +12,94 @@ struct InitialWorkoutView: View {
     
     @Environment(\.modelContext) var modelContext
     @Environment(Router.self) var stackPathTransaction : Router
-    let diameter = UIScreen.main.bounds.width/6
+    let diameter = UIScreen.main.bounds.width/8
+    @State private var selectedDate: Date = .now
     @State private var viewModel: InitialWorkoutViewModel
     
-    init(workoutDataManager: WorkoutDataProvidable) {
-        self.viewModel = InitialWorkoutViewModel(workoutDataManager: workoutDataManager)
+    init(routineDataManager: RoutineDataProvidable) {
+        self.viewModel = InitialWorkoutViewModel(routineDataManager: routineDataManager)
     }
     
     var body: some View {
-        VStack(spacing: 24) {
-            
-            calendar
-            
-            HStack {
+        
+        ScrollView {
+            VStack(spacing: 24) {
                 
-                circularProgress(done: 3, total: 7)
+                CalendarView(date: $selectedDate, routineDataManager: RoutineDataProvider(context: modelContext))
+                                
+                HStack {
+                    
+                    circularProgress(done: 3, total: 7)
+                    
+                    Spacer()
+                    
+                    circularProgress(done: 18, total: selectedDate.numberOfDaysInMonth)
+                    
+                    Spacer()
+                    
+                    circularProgress(done: 40, total: selectedDate.numberOfDaysInYear)
+                }
+                .padding(.horizontal)
                 
-                Spacer()
+                Button {
+                    stackPathTransaction.goTo(view: RouterValue(view: .Workouts))
+                } label: {
+                    HStack {
+                        Image(systemName: "dumbbell")
+                        Text("Começar Treino")
+                        Image(systemName: "dumbbell")
+                    }
+                    .foregroundStyle(.black)
+                    .font(.title3.bold())
+                    .padding()
+                    .background {
+                        RoundedRectangle(cornerRadius: 8)
+                            .tint(.accent)
+                    }
+                }
                 
-                circularProgress(done: 18, total: 30)
+                Text("Histórico")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                    .padding(.bottom, -8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Spacer()
-                
-                circularProgress(done: 40, total: 365)
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    Section {
+                        ForEach(viewModel.routines) { routine in
+                            RoutineCellView(routine: routine)
+                            
+                            // Add a divider after each item except the last one
+                            if routine != viewModel.routines.last {
+                                Divider()
+                                    .padding(.vertical, 8) // Add padding around the divider
+                            }
+                        }
+                    }
+                }
+                .padding(16)
+                .background {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(Color(.secondarySystemBackground))
+                }
             }
-            .padding(.horizontal)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding()
-    }
-    
-    @ViewBuilder
-    var calendar : some View {
-        Circle()
-            .stroke(style: StrokeStyle(lineWidth: 8))
-            .opacity(0.25)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: {
+                    stackPathTransaction.goTo(view: RouterValue(view: .Workouts))
+                }) {
+                    Text("Treinar")
+                        .font(.headline)
+                        .foregroundStyle(.accent)
+                }
+            }
+        }
+        .navigationDestination(for: RouterValue.self) { value in
+            WorkoutNavigationDetinationView(value: value)
+        }
     }
     
     @ViewBuilder
@@ -72,7 +125,7 @@ struct InitialWorkoutView: View {
                     .bold()
                     .foregroundStyle(.accent)
             }
-                
+            
             
             CircularProgressView(progress: progress)
                 .frame(width: diameter, height: diameter)
@@ -90,7 +143,7 @@ struct InitialWorkoutView: View {
     
     let preview = Preview()
     preview.addWorkoutSamples()
-    return InitialWorkoutView(workoutDataManager: WorkoutMockDataProvider())
-            .modelContainer(preview.modelContainer)
-            .environment(Router())
+    return InitialWorkoutView(routineDataManager: RoutineMockDataProvider())
+        .modelContainer(preview.modelContainer)
+        .environment(Router())
 }
